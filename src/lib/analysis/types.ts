@@ -28,6 +28,14 @@ export type TestIdea = {
   reason: string;
 };
 
+export type PatchSuggestion = {
+  title: string;
+  file: string;
+  severity: "low" | "medium" | "high";
+  rationale: string;
+  suggestedDiff: string;
+};
+
 export type AnalysisReport = {
   summary: string;
   architecture: string[];
@@ -35,6 +43,7 @@ export type AnalysisReport = {
   findings: Finding[];
   improvements: string[];
   testIdeas: TestIdea[];
+  patchSuggestions: PatchSuggestion[];
   markdown: string;
 };
 

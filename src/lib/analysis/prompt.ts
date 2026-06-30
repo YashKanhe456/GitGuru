@@ -49,8 +49,19 @@ Return only valid JSON with this shape:
       "target": "file or area",
       "reason": "why this test matters"
     }
+  ],
+  "patchSuggestions": [
+    {
+      "title": "PR-style review comment title",
+      "file": "file path from the sampled files",
+      "severity": "low|medium|high",
+      "rationale": "why this change is useful",
+      "suggestedDiff": "small unified diff or code replacement snippet under 25 lines"
+    }
   ]
 }
+
+Return 1-2 patchSuggestions only. Keep suggestedDiff small and focused.
 `;
 }
 
@@ -65,6 +76,20 @@ export function reportToMarkdown(snapshot: RepoSnapshot, report: Omit<AnalysisRe
   const testLines = report.testIdeas
     .map((test) => `- **${test.title}** (${test.target}): ${test.reason}`)
     .join("\n");
+
+  const patchLines = (report.patchSuggestions ?? [])
+    .map(
+      (patch) => `### ${patch.title}
+
+- Severity: ${patch.severity.toUpperCase()}
+- File: ${patch.file}
+- Rationale: ${patch.rationale}
+
+\`\`\`diff
+${patch.suggestedDiff}
+\`\`\``,
+    )
+    .join("\n\n");
 
   return `# GitGuru Report: ${snapshot.owner}/${snapshot.repo}
 
@@ -85,5 +110,8 @@ ${report.improvements.map((item) => `- ${item}`).join("\n")}
 
 ## Test Plan
 ${testLines || "- Add smoke tests around the main user flow."}
+
+## Patch Suggestions
+${patchLines || "- No patch suggestions returned for this focused scan."}
 `;
 }

@@ -10,6 +10,7 @@ GitGuru turns a GitHub repository URL into a focused engineering report. It scan
 - Dynamic repo tree and file sampling
 - LangGraph workflow: scan repository, build prompt, generate report
 - Groq-powered architecture, risk, improvement, and test-plan generation
+- PR-style actionable review with patch suggestions
 - Neon Postgres history for saved analyses
 - Reopen saved reports from recent analyses
 - Markdown report download
@@ -66,12 +67,13 @@ It creates the `analyses` table used for saved report history.
 2. GitGuru fetches the repository tree and focused source files.
 3. LangGraph coordinates scan, prompt, and report generation.
 4. Groq returns a structured engineering report.
-5. Neon saves the report when configured.
-6. The UI displays the report and allows Markdown download.
+5. GitGuru adds PR-style patch suggestions for selected issues.
+6. Neon saves the report when configured.
+7. The UI displays the report and allows Markdown download.
 
 ## Resume Pitch
 
-Built GitGuru, a full-stack AI codebase intelligence app using Next.js, LangGraph, Groq, and Neon Postgres. It analyzes GitHub repositories, generates architecture summaries, detects code risks with severity labels, suggests improvements, creates test plans, saves analysis history, and exports Markdown engineering reports.
+Built GitGuru, a full-stack AI codebase intelligence app using Next.js, LangGraph, Groq, and Neon Postgres. It analyzes GitHub repositories, generates architecture summaries, detects code risks with severity labels, suggests improvements, creates test plans, produces PR-style patch suggestions, saves analysis history, and exports Markdown engineering reports.
 
 ## Validation
 

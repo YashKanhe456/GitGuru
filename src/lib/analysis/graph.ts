@@ -28,6 +28,17 @@ const reportSchema = z.object({
       }),
     )
     .default([]),
+  patchSuggestions: z
+    .array(
+      z.object({
+        title: z.string(),
+        file: z.string(),
+        severity: z.enum(["low", "medium", "high"]),
+        rationale: z.string(),
+        suggestedDiff: z.string(),
+      }),
+    )
+    .default([]),
 });
 
 const AnalysisState = Annotation.Root({
@@ -135,6 +146,16 @@ function buildFallbackReport(snapshot: RepoSnapshot): AnalysisReport {
         title: "Analysis route smoke test",
         target: "/api/analyze",
         reason: "The main product flow depends on reliable report generation.",
+      },
+    ],
+    patchSuggestions: [
+      {
+        title: "Add provider configuration before reviewing patches",
+        file: ".env.local",
+        severity: "medium" as const,
+        rationale: "Patch suggestions require Groq to inspect sampled source files and return concrete code changes.",
+        suggestedDiff:
+          "- GROQ_API_KEY=\n+ GROQ_API_KEY=your_groq_key_here\n  GROQ_MODEL=llama-3.3-70b-versatile",
       },
     ],
   };

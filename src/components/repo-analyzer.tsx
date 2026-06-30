@@ -5,6 +5,7 @@ import {
   AlertTriangle,
   Brain,
   CheckCircle2,
+  Clipboard,
   Download,
   FileCode2,
   GitBranch,
@@ -337,6 +338,73 @@ function ReportView({ result }: { result: AnalysisResult }) {
             </p>
           )}
         </div>
+      </div>
+
+      <PatchSuggestions result={result} />
+    </div>
+  );
+}
+
+function PatchSuggestions({ result }: { result: AnalysisResult }) {
+  const patchSuggestions = result.report.patchSuggestions ?? [];
+
+  async function copyPatch(patch: string) {
+    await navigator.clipboard.writeText(patch);
+  }
+
+  return (
+    <div className="rounded-lg border border-white/10 bg-[#171a1e] p-5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-white">PR-style patch suggestions</h3>
+          <p className="mt-1 text-sm leading-6 text-zinc-500">
+            Review-ready changes generated from the focused file scan.
+          </p>
+        </div>
+        <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs text-zinc-400">
+          {patchSuggestions.length} suggestions
+        </span>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        {patchSuggestions.length > 0 ? (
+          patchSuggestions.map((patch) => (
+            <article
+              key={`${patch.file}-${patch.title}`}
+              className="rounded-md border border-white/10 bg-[#111316]"
+            >
+              <div className="border-b border-white/10 p-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`rounded-full px-2 py-1 text-xs font-medium ${severityClassName(patch.severity)}`}>
+                    {patch.severity}
+                  </span>
+                  <h4 className="font-medium text-zinc-100">{patch.title}</h4>
+                </div>
+                <p className="mt-2 font-mono text-xs text-cyan-200">{patch.file}</p>
+                <p className="mt-3 text-sm leading-6 text-zinc-400">{patch.rationale}</p>
+              </div>
+              <div className="p-4">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <p className="text-xs font-medium uppercase text-zinc-500">Suggested diff</p>
+                  <button
+                    onClick={() => void copyPatch(patch.suggestedDiff)}
+                    className="inline-flex h-8 items-center gap-2 rounded-md border border-white/10 px-3 text-xs font-medium text-zinc-300 transition hover:bg-white/5"
+                  >
+                    <Clipboard size={14} />
+                    Copy
+                  </button>
+                </div>
+                <pre className="max-h-72 overflow-auto rounded-md border border-white/10 bg-black/30 p-4 text-xs leading-5 text-zinc-200">
+                  <code>{patch.suggestedDiff}</code>
+                </pre>
+              </div>
+            </article>
+          ))
+        ) : (
+          <p className="rounded-md border border-white/10 bg-[#111316] p-4 text-sm text-zinc-500">
+            No patch suggestions returned for this focused scan.
+          </p>
+        )}
       </div>
     </div>
   );
