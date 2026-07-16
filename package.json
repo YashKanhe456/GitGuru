@@ -1,22 +1,24 @@
 {
-  "name": "gitguru",
+  "name": "vulcan",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "dotenv -e .env.local -- prisma migrate deploy",
+    "db:validate": "dotenv -e .env.local -- prisma validate",
+    "postinstall": "prisma generate",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@langchain/core": "^1.2.1",
-    "@langchain/langgraph": "^1.4.5",
-    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/client": "^6.19.3",
     "clsx": "^2.1.1",
-    "drizzle-orm": "^0.45.2",
-    "groq-sdk": "^1.3.0",
     "lucide-react": "^1.21.0",
-    "next": "16.2.9",
+    "next": "15.5.20",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "tailwind-merge": "^3.6.0",
@@ -27,9 +29,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "15.5.20",
+    "prisma": "^6.19.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }

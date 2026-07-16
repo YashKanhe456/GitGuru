@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0e0e0f;
+  --foreground: #e5e2e3;
+  --surface: #131314;
+  --surface-strong: #1c1b1c;
+  --surface-raised: #201f20;
+  --border: #35302a;
+  --border-muted: #27272a;
+  --accent: #d7b46a;
+  --accent-bright: #f5cf83;
+  --muted: #aea69a;
 }
 
 @theme inline {
@@ -10,57 +18,85 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-strong: var(--surface-strong);
+  --color-surface-raised: var(--surface-raised);
   --color-border: var(--border);
   --color-accent: var(--accent);
-  --font-sans: "Trebuchet MS", "Segoe UI", sans-serif;
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-mono: Consolas, "Courier New", monospace;
+  --color-muted: var(--muted);
+  --font-sans: var(--font-geist), Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
-:root {
-  --background: #f4efe7;
-  --foreground: #1e1814;
-  --surface: rgba(255, 250, 244, 0.78);
-  --surface-strong: rgba(255, 252, 248, 0.96);
-  --border: rgba(60, 45, 34, 0.16);
-  --accent: #1f7a66;
-}
+* { border-color: var(--border-muted); }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(31, 122, 102, 0.15), transparent 28%),
-    radial-gradient(circle at 90% 10%, rgba(170, 93, 46, 0.12), transparent 22%),
-    linear-gradient(180deg, #f8f4ec 0%, #f1eadf 100%);
+  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans), Arial, sans-serif;
 }
 
-.font-display {
-  font-family: var(--font-serif), Georgia, serif;
+.technical-grid {
+  background-color: var(--background);
+  background-image: radial-gradient(rgba(229, 226, 227, 0.12) 0.6px, transparent 0.7px), linear-gradient(rgba(229, 226, 227, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(229, 226, 227, 0.025) 1px, transparent 1px);
+  background-position: -8px -8px, 0 0, 0 0;
+  background-size: 16px 16px, 64px 64px, 64px 64px;
 }
 
-.font-code {
-  font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+.technical-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.surface {
+.panel {
+  border: 1px solid var(--border-muted);
   background: var(--surface);
+}
+
+.panel-raised {
   border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-}
-
-.surface-strong {
   background: var(--surface-strong);
-  border: 1px solid rgba(60, 45, 34, 0.18);
 }
 
-.paper-grid {
-  background-image:
-    linear-gradient(rgba(60, 45, 34, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(60, 45, 34, 0.06) 1px, transparent 1px);
-  background-size: 28px 28px;
+.technical-input {
+  width: 100%;
+  border: 1px solid #4d4639;
+  border-radius: 0;
+  background: #111112;
+  color: var(--foreground);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
 }
 
-.ink-shadow {
-  box-shadow: 0 30px 80px rgba(30, 24, 20, 0.12);
+.technical-input:focus {
+  border-color: var(--accent);
+  background: #171615;
+}
+
+.technical-button {
+  border: 1px solid var(--accent-bright);
+  border-radius: 0;
+  background: var(--accent);
+  color: #261a00;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.technical-button:hover { background: var(--accent-bright); }
+.technical-button:disabled { cursor: not-allowed; opacity: 0.55; }
+
+.evidence-chip {
+  border: 1px solid #4d4639;
+  border-radius: 0;
+  background: #171615;
+  color: #d0c5b4;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
 }

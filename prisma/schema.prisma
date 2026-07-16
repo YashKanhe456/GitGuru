@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Repository {
+  id            String   @id @default(cuid())
+  url           String   @unique
+  owner         String
+  name          String
+  defaultBranch String?
+  clonePath     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  analyses      Analysis[]
+}
+
+model RepositoryCloneJob {
+  id            String   @id @default(cuid())
+  repositoryUrl String
+  status        String   @default("queued")
+  clonePath     String?
+  errorMessage  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Analysis {
+  id              String   @id @default(cuid())
+  repositoryId    String
+  repository      Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  defaultBranch   String
+  constraints     Json
+  knowledgeModel  Json
+  recommendations Json
+  truncated       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  @@index([repositoryId, createdAt])
+}

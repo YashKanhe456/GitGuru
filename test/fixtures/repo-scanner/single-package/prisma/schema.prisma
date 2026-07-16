@@ -1,0 +1,3 @@
+model Example {
+  id String @id
+}

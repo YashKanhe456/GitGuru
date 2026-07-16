@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+});
+
 export const metadata: Metadata = {
-  title: "GitGuru",
-  description: "AI-powered codebase intelligence for GitHub repositories.",
+  title: "Vulcan",
+  description: "AI-powered engineering review platform for GitHub repositories.",
 };
 
 export default function RootLayout({
@@ -12,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className="min-h-full flex flex-col antialiased">{children}</body>
+    <html lang="en" className={`h-full ${geist.variable} ${geistMono.variable}`}>
+      <body className="min-h-full bg-background text-foreground antialiased">{children}</body>
     </html>
   );
 }
