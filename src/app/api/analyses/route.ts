@@ -56,13 +56,17 @@ export async function POST(request: NextRequest) {
 
     const input = requestSchema.parse(await request.json());
     const analysis = await analyzeGitHubRepository(input);
-    const storedAnalysis = await saveAnalysis({ ...analysis, constraints: input.constraints });
+    const storedAnalysis = await persistAnalysis({ ...analysis, constraints: input.constraints });
 
     return NextResponse.json({
-      analysisId: storedAnalysis.id,
-      createdAt: storedAnalysis.createdAt,
+      analysisId: storedAnalysis?.id,
+      createdAt: storedAnalysis?.createdAt ?? new Date().toISOString(),
+      persistence: {
+        saved: Boolean(storedAnalysis),
+        message: storedAnalysis ? undefined : "Analysis history is temporarily unavailable.",
+      },
       ...analysis,
-    }, { status: 201 });
+    }, { status: storedAnalysis ? 201 : 200 });
   } catch (error) {
     if (error instanceof RepositoryInspectionError) {
       return NextResponse.json({ error: error.message }, { status: error.status });
@@ -74,5 +78,18 @@ export async function POST(request: NextRequest) {
 
     console.error("Analysis request failed", error);
     return NextResponse.json({ error: "Could not analyze this repository. Verify DATABASE_URL and try again." }, { status: 500 });
+  }
+}
+
+async function persistAnalysis(input: Parameters<typeof saveAnalysis>[0]) {
+  if (!env.DATABASE_URL) {
+    return null;
+  }
+
+  try {
+    return await saveAnalysis(input);
+  } catch (error) {
+    console.error("Analysis persistence failed", error);
+    return null;
   }
 }
